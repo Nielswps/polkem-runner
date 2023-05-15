@@ -278,9 +278,9 @@ pub mod api {
         let runtime_metadata_hash = client.metadata().metadata_hash(&PALLETS);
         if runtime_metadata_hash
             != [
-                49u8, 110u8, 226u8, 208u8, 146u8, 126u8, 38u8, 34u8, 167u8, 239u8, 244u8, 193u8,
-                55u8, 89u8, 4u8, 159u8, 235u8, 205u8, 211u8, 53u8, 231u8, 80u8, 155u8, 199u8, 41u8,
-                179u8, 85u8, 111u8, 93u8, 224u8, 2u8, 60u8,
+                99u8, 183u8, 161u8, 219u8, 93u8, 128u8, 158u8, 27u8, 91u8, 104u8, 189u8, 9u8, 37u8,
+                85u8, 222u8, 121u8, 93u8, 146u8, 140u8, 25u8, 32u8, 241u8, 44u8, 5u8, 244u8, 222u8,
+                182u8, 59u8, 185u8, 203u8, 127u8, 53u8,
             ]
         {
             Err(::subxt::error::MetadataError::IncompatibleMetadata)
@@ -6043,10 +6043,18 @@ pub mod api {
                 pub amount: ::core::primitive::u16,
                 pub price: ::core::primitive::u8,
             }
+            #[derive(
+                :: subxt :: ext :: codec :: Decode,
+                :: subxt :: ext :: codec :: Encode,
+                :: subxt :: ext :: scale_decode :: DecodeAsType,
+                :: subxt :: ext :: scale_encode :: EncodeAsType,
+                Debug,
+            )]
+            #[decode_as_type(crate_path = ":: subxt :: ext :: scale_decode")]
+            #[encode_as_type(crate_path = ":: subxt :: ext :: scale_encode")]
+            pub struct MatchEnergyTrades;
             pub struct TransactionApi;
             impl TransactionApi {
-                #[doc = "An example dispatchable that takes a singles value as a parameter, writes the value to"]
-                #[doc = "storage and emits an event. This function must be dispatched by a signed extrinsic."]
                 pub fn create_energy_offer(
                     &self,
                     amount: ::core::primitive::u16,
@@ -6077,6 +6085,19 @@ pub mod api {
                             49u8, 165u8, 209u8, 184u8, 0u8, 242u8, 104u8, 235u8, 7u8, 30u8, 201u8,
                             45u8, 163u8, 196u8, 103u8, 65u8, 179u8, 18u8, 250u8, 236u8, 251u8,
                             49u8, 20u8, 240u8, 125u8, 216u8, 43u8, 20u8, 179u8, 61u8, 185u8, 73u8,
+                        ],
+                    )
+                }
+                pub fn match_energy_trades(&self) -> ::subxt::tx::Payload<MatchEnergyTrades> {
+                    ::subxt::tx::Payload::new_static(
+                        "Energychain",
+                        "match_energy_trades",
+                        MatchEnergyTrades {},
+                        [
+                            144u8, 73u8, 209u8, 58u8, 177u8, 228u8, 206u8, 239u8, 214u8, 68u8,
+                            64u8, 74u8, 6u8, 23u8, 34u8, 251u8, 64u8, 156u8, 181u8, 90u8, 147u8,
+                            24u8, 194u8, 133u8, 178u8, 216u8, 242u8, 197u8, 47u8, 176u8, 86u8,
+                            162u8,
                         ],
                     )
                 }
@@ -6152,7 +6173,7 @@ pub mod api {
             use super::runtime_types;
             pub struct StorageApi;
             impl StorageApi {
-                #[doc = " Storage Map for EnergyOffer by seller Id (Hash) to a EnergyOffer"]
+                #[doc = " Storage Map for EnergyOffer by hash to a EnergyOffer"]
                 pub fn energy_offers(
                     &self,
                     _0: impl ::std::borrow::Borrow<::subxt::utils::H256>,
@@ -6177,7 +6198,7 @@ pub mod api {
                         ],
                     )
                 }
-                #[doc = " Storage Map for EnergyOffer by seller Id (Hash) to a EnergyOffer"]
+                #[doc = " Storage Map for EnergyOffer by hash to a EnergyOffer"]
                 pub fn energy_offers_root(
                     &self,
                 ) -> ::subxt::storage::address::Address<
@@ -6199,7 +6220,7 @@ pub mod api {
                         ],
                     )
                 }
-                #[doc = " Storage Map for EnergyOffer by seller Id (Hash) to a EnergyOffer"]
+                #[doc = " Storage Map for EnergyRequest by hash to a EnergyRequest"]
                 pub fn energy_requests(
                     &self,
                     _0: impl ::std::borrow::Borrow<::subxt::utils::H256>,
@@ -6224,7 +6245,7 @@ pub mod api {
                         ],
                     )
                 }
-                #[doc = " Storage Map for EnergyOffer by seller Id (Hash) to a EnergyOffer"]
+                #[doc = " Storage Map for EnergyRequest by hash to a EnergyRequest"]
                 pub fn energy_requests_root(
                     &self,
                 ) -> ::subxt::storage::address::Address<
@@ -7901,18 +7922,18 @@ pub mod api {
                 #[encode_as_type(crate_path = ":: subxt :: ext :: scale_encode")]
                 #[doc = "Contains one variant per dispatchable that can be called by an extrinsic."]
                 pub enum Call {
-                    #[codec(index = 0)]
-                    #[doc = "An example dispatchable that takes a singles value as a parameter, writes the value to"]
-                    #[doc = "storage and emits an event. This function must be dispatched by a signed extrinsic."]
+                    #[codec(index = 1)]
                     create_energy_offer {
                         amount: ::core::primitive::u16,
                         price: ::core::primitive::u8,
                     },
-                    #[codec(index = 1)]
+                    #[codec(index = 2)]
                     create_energy_request {
                         amount: ::core::primitive::u16,
                         price: ::core::primitive::u8,
                     },
+                    #[codec(index = 3)]
+                    match_energy_trades,
                 }
                 #[derive(
                     :: subxt :: ext :: codec :: Decode,
