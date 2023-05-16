@@ -12,7 +12,7 @@ impl NodeConnection {
 
         let client = match subxt::OnlineClient::<subxt::SubstrateConfig>::from_url(format!("ws://{}", &url)).await {
             Ok(api) => api,
-            Err(e) => return Err(Error::SUBSTRATE(format!("An error occurred while trying to establish a connection to the node listening at '{url}': {:?}", e)))
+            Err(e) => return Err(Error::Substrate(format!("An error occurred while trying to establish a connection to the node listening at '{url}': {:?}", e)))
         };
 
         Ok(NodeConnection { client })

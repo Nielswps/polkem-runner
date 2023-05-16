@@ -2,7 +2,7 @@
 
 use polkem_runner::{
     prelude::*,
-    something
+    log_finalised_blocks
 };
 
 use clap::Parser;
@@ -18,7 +18,6 @@ struct Args {
     data_location: String,
 }
 
-#[allow(unused)] //todo!("Remove")
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
@@ -28,6 +27,7 @@ async fn main() -> Result<()> {
         false => return Err(Error::CLI(format!("Node url must be less than 256 characters")))
     };
 
+    // ToDo: Incorporate functionality to use data for creating transactions
     let data_location = match args.data_location.len() < 1024 {
         true => args.data_location,
         false => return Err(Error::CLI(format!("Path to data must be less than 1024 characters")))
@@ -35,7 +35,7 @@ async fn main() -> Result<()> {
 
     let node_connection = NodeConnection::new(node_url).await?;
 
-    match something(&node_connection).await {
+    match log_finalised_blocks(&node_connection).await {
         Ok(_) => {}
         Err(e) => println!("{}", e.to_string())
     };

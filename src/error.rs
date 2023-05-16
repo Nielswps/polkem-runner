@@ -11,6 +11,9 @@ pub enum Error {
     #[error("CLI argument parsing failed: {0}")]
     CLI(String),
 
-    #[error("interaction with Substrate resulted in error: {0}")]
-    SUBSTRATE(String),
+    #[error("Interaction with Substrate resulted in error: {0}")]
+    Substrate(String),
+
+    #[error("Attempt at POST request to the logging agent resulted in error: {0}")]
+    Log(String),
 }
