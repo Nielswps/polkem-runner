@@ -8,20 +8,20 @@ pub mod substrate_utils;
 pub mod error;
 pub mod prelude;
 
-/// Log finalised block hashes using the logging agent. Returns any encountered errors
+/// Log finalized block hashes using the logging agent. Returns any encountered errors
 ///
 /// # Arguments
 /// * `connection`: NodeConnection to the running substrate node
 ///
 /// returns: Result<(), Box<dyn Error>>
-pub async fn log_finalised_blocks(connection: &NodeConnection, log_endpoint: String) -> std::result::Result<(), Box<dyn std::error::Error>> {
+pub async fn log_finalized_blocks(connection: &NodeConnection, log_endpoint: String) -> std::result::Result<(), Box<dyn std::error::Error>> {
     async fn log_block(block: SubstrateBlock, log_url: &String) -> Result<()> {
         let block_hash = block.hash();
 
         let log_client = reqwest::Client::new();
         let res = log_client
             .post(log_url)
-            .body(format!("Block {} was observed as finalised", block_hash))
+            .body(format!("Block {} was observed as finalized", block_hash))
             .send()
             .await;
 
@@ -31,18 +31,18 @@ pub async fn log_finalised_blocks(connection: &NodeConnection, log_endpoint: Str
         }
     }
 
-    node_driver::subscribe_to_finalised_blocks(connection, |block| log_block(block, &log_endpoint)).await.expect("Should be able to subscribe to blocks");
+    node_driver::subscribe_to_finalized_blocks(connection, |block| log_block(block, &log_endpoint)).await.expect("Should be able to subscribe to blocks");
 
     Ok(())
 }
 
-/// Log proposed and finalised block hashes using the logging agent. Returns any encountered errors
+/// Log proposed and finalized block hashes using the logging agent. Returns any encountered errors
 ///
 /// # Arguments
 /// * `connection`: NodeConnection to the running substrate node
 ///
 /// returns: Result<(), Box<dyn Error>>
-pub async fn  log_proposed_and_finalised_blocks(connection_1: NodeConnection, connection_2: NodeConnection, log_endpoint: &str) -> std::result::Result<(), Box<dyn std::error::Error>> {
+pub async fn  log_proposed_and_finalized_blocks(connection_1: NodeConnection, connection_2: NodeConnection, log_endpoint: &str) -> std::result::Result<(), Box<dyn std::error::Error>> {
     async fn log_block(block: SubstrateBlock, log_url: &String, block_state: &str) -> Result<()> {
         let block_hash = block.hash();
 
@@ -67,7 +67,7 @@ pub async fn  log_proposed_and_finalised_blocks(connection_1: NodeConnection, co
 
     let log = String::from(log_endpoint);
     let handle_2 = tokio::spawn(async move {
-        node_driver::subscribe_to_finalised_blocks(&connection_2, |block| log_block(block, &log, "finalised")).await.expect("Should be able to subscribe to finalised blocks");
+        node_driver::subscribe_to_finalized_blocks(&connection_2, |block| log_block(block, &log, "finalized")).await.expect("Should be able to subscribe to finalized blocks");
     });
 
     // Trigger subscriber tasks

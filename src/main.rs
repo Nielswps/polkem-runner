@@ -1,8 +1,8 @@
 use std::ops::Add;
 use polkem_runner::{
     prelude::*,
-    log_finalised_blocks,
-    log_proposed_and_finalised_blocks,
+    log_finalized_blocks,
+    log_proposed_and_finalized_blocks,
 };
 
 use clap::Parser;
@@ -48,8 +48,8 @@ async fn main() -> Result<()> {
     let node_connection_2 = NodeConnection::new(&node_url).await?;
     let endpoint_for_logs = if log_endpoint.ends_with('/') { log_endpoint } else { log_endpoint.add("/") };
 
-    // Start logging proposed and finalised blocks
-    match log_proposed_and_finalised_blocks(node_connection_1, node_connection_2, endpoint_for_logs.add(&node_id).as_str()).await {
+    // Start logging proposed and finalized blocks
+    match log_proposed_and_finalized_blocks(node_connection_1, node_connection_2, endpoint_for_logs.add(&node_id).as_str()).await {
         Ok(_) => {}
         Err(e) => println!("{}", e.to_string())
     };

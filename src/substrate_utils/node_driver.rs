@@ -8,21 +8,21 @@ use crate::prelude::*;
 use crate::substrate_utils::node_connection::NodeConnection;
 
 
-/// Subscribe to finalised blocks at the NodeConnection
+/// Subscribe to finalized blocks at the NodeConnection
 ///
 /// # Arguments
 /// * `connection`: NodeConnection to the running substrate node
 /// * `block_consumer`: function for consuming fetched blocks
 ///
 /// returns: ()
-pub async fn subscribe_to_finalised_blocks<T>(connection: &NodeConnection,
+pub async fn subscribe_to_finalized_blocks<T>(connection: &NodeConnection,
                                               block_consumer: impl Fn(SubstrateBlock) -> T)
                                               -> Result<()>
     where
         T: Future<Output=Result<()>> {
-    let mut blocks_sub = match connection.get_api().blocks().subscribe_finalised().await {
+    let mut blocks_sub = match connection.get_api().blocks().subscribe_finalized().await {
         Ok(block_stream) => block_stream,
-        Err(e) => return Err(Error::Substrate(format!("Encountered error while trying to subscribe to finalised blocks: {:?}", e)))
+        Err(e) => return Err(Error::Substrate(format!("Encountered error while trying to subscribe to finalized blocks: {:?}", e)))
     };
 
     while let Some(block) = blocks_sub.next().await {
@@ -35,7 +35,7 @@ pub async fn subscribe_to_finalised_blocks<T>(connection: &NodeConnection,
     Ok(())
 }
 
-/// Subscribe to proposed and finalised blocks at the NodeConnection
+/// Subscribe to proposed and finalized blocks at the NodeConnection
 ///
 /// # Arguments
 /// * `connection`: NodeConnection to the running substrate node
